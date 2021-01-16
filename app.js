@@ -121,7 +121,9 @@ function prepareSuccessfulResponse(leaderboardData, playerData, playerRank) {
 function prepareUnsuccessfulResponse(isSuccess, res) {
   var responseData = {
     isSuccess: isSuccess,
-    data: null
+    leaderboardData: null,
+    playerData: null,
+    playerRank: null
   };
   res.status(200).send(responseData);
   return responseData;
