@@ -37,11 +37,7 @@ mongoose.connect("mongodb+srv://admin:YgyV7SmnmIBGbfGD@clustertheme.nyrvr.mongod
 });
 
 var trafficMadnessSchema = new mongoose.Schema({
-  "_id": {
-    type: mongoose.Schema.Types.ObjectId,
-    required: false
-  }
-  , "playerId": String
+  "playerId": String
   , "playerName": String
   , "levelName": String
   , "score": Number
@@ -80,6 +76,30 @@ app.get("/leaderboards/:levelName/:limit/:playerId", (req, res) => {
     return prepareUnsuccessfulResponse(true, res);
   }
 });
+
+app.post("/leaderboards",(req,res) => {
+  let playerInfo = req.body;
+  trafficMadness.find({"playerId" : req.body.playerId},(err,docs) => {
+    console.log(docs);
+    if(err) {
+      console.log(err);
+    }
+    if(docs.length > 0) {
+      let oldScore = docs[0].score;
+      if(playerInfo.score > oldScore) {
+        docs[0].score = playerInfo.score;
+        docs[0].save((err,doc) => {
+          res.send(doc);
+        });
+      }
+    } else {
+      let tm = new trafficMadness(playerInfo);
+      tm.save((err,doc) => {
+        res.send(doc);
+      });
+    }
+  });
+})
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
