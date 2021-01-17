@@ -65,6 +65,9 @@ app.get("/leaderboards/:levelName/:limit/:playerId", (req, res) => {
           if(players != null && players.length > 0) {
             return findPlayerDataAndReturnResponse(players, res, leaderboardData);
           }
+          else {
+            res.status(200).send(prepareSuccessfulResponse(leaderboardData, "", 0));
+          }
       });
       }
       else {
