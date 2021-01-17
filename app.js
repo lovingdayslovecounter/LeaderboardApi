@@ -82,7 +82,7 @@ app.get("/leaderboards/:levelName/:limit/:playerId", (req, res) => {
 
 app.post("/leaderboards",(req,res) => {
   let playerInfo = req.body;
-  trafficMadness.find({"playerId" : req.body.playerId},(err,docs) => {
+  trafficMadness.find({"playerId" : req.body.playerId, "levelName" : req.body.levelName},(err,docs) => {
     console.log(docs);
     if(err) {
       console.log(err);
