@@ -61,7 +61,7 @@ app.get("/leaderboards/:levelName/:limit/:playerId", (req, res) => {
     trafficMadness.find({ levelName: { $eq: levelNameReq } }, { "playerId": true, "playerName": true, "levelName": true,"score" : true, "_id": false }).sort(sort).limit(limitReq).exec(function(err, leaderboards) {
       if (leaderboards != null && leaderboards.length > 0) {
         leaderboardData = leaderboards.map(leaderboard => ({ playerId: leaderboard.playerId, playerName: leaderboard.playerName, levelName: leaderboard.levelName, score: leaderboard.score }));
-        trafficMadness.find({playerId : {$eq: playerIdReq}}, { "playerId": true, "playerName": true, "levelName": true,"score" : true, "_id": false }).exec(function(err, players){
+        trafficMadness.find({playerId : {$eq: playerIdReq}, levelName: levelNameReq}, { "playerId": true, "playerName": true, "levelName": true,"score" : true, "_id": false }).exec(function(err, players){
           if(players != null && players.length > 0) {
             return findPlayerDataAndReturnResponse(players, res, leaderboardData, levelNameReq);
           }
