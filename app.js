@@ -63,7 +63,7 @@ app.get("/leaderboards/:levelName/:limit/:playerId", (req, res) => {
         leaderboardData = leaderboards.map(leaderboard => ({ playerId: leaderboard.playerId, playerName: leaderboard.playerName, levelName: leaderboard.levelName, score: leaderboard.score }));
         trafficMadness.find({playerId : {$eq: playerIdReq}}, { "playerId": true, "playerName": true, "levelName": true,"score" : true, "_id": false }).exec(function(err, players){
           if(players != null && players.length > 0) {
-            return findPlayerDataAndReturnResponse(players, res, leaderboardData);
+            return findPlayerDataAndReturnResponse(players, res, leaderboardData, levelNameReq);
           }
           else {
             res.status(200).send(prepareSuccessfulResponse(leaderboardData, "", 0));
@@ -124,9 +124,9 @@ module.exports = app;
 app.listen(port);
 console.log("Server is running @ port ".concat(port));
 
-function findPlayerDataAndReturnResponse(players, res, leaderboardData) {
+function findPlayerDataAndReturnResponse(players, res, leaderboardData, levelNameReq) {
   var playerData = players.map(leaderboard => ({ playerId: leaderboard.playerId, playerName: leaderboard.playerName, levelName: leaderboard.levelName, score: leaderboard.score }));
-  trafficMadness.find({ score: { $gte: playerData[0].score } }).exec(function (err, playerRanks) {
+  trafficMadness.find({ score: { $gte: playerData[0].score }, levelName: levelNameReq}).exec(function (err, playerRanks) {
     res.status(200).send(prepareSuccessfulResponse(leaderboardData, playerData, playerRanks.length));
   });
   return playerData;
