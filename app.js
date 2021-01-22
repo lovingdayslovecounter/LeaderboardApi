@@ -104,6 +104,24 @@ app.post("/leaderboards",(req,res) => {
   });
 })
 
+app.post("/leaderboards/:playerId/:playerName",(req,res) => {
+  let playerIdReq = req.params.playerId;
+  let playerNameReq = req.params.playerName;
+  trafficMadness.find({"playerId" : playerIdReq},(err,docs) => {
+    console.log(docs);
+    if(err) {
+      console.log(err);
+    }
+    if(docs.length > 0) {
+        doc.forEach(function(item){
+          item.playerName = playerNameReq;
+          item.save(err,doc);
+        });
+    }
+    res.send(docs);
+  });
+})
+
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
