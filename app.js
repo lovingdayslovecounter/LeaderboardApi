@@ -113,9 +113,10 @@ app.post("/leaderboards/:playerId/:playerName",(req,res) => {
       console.log(err);
     }
     if(docs.length > 0) {
-        doc.forEach(function(item){
+      docs.forEach(function(item){
           item.playerName = playerNameReq;
-          item.save(err,doc);
+          item.save((err,item)=> {
+          });
         });
     }
     res.send(docs);
